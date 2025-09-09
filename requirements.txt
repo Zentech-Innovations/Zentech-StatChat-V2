@@ -1,0 +1,11 @@
+streamlit
+google-genai
+python-dotenv
+streamlit_authenticator
+streamlit-pdf-viewer
+plotly
+yfinance
+openai
+anthropic
+pycryptodome
+pandas

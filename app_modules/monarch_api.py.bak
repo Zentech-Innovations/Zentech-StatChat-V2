@@ -1,0 +1,282 @@
+# app.py
+import datetime
+import json
+import requests
+from google.genai import types as gemini_types
+from app_modules import app_config
+
+
+def get_monarch_personal_financial_trades_impl(client_code: str):
+    common_config = app_config.COMMON_MONARCH_API_SETTINGS
+
+    api_base_url = common_config.get("trades_api_base_url")
+    api_date_format = common_config.get("date_format_api", "%d/%m/%Y")
+    param_map = common_config.get("param_map", {})
+
+    api_params = common_config["fixed_params"].copy()
+
+    if (
+        not api_base_url
+        or not api_params.get("UrlUserName")
+        or not api_params.get("UrlPassword")
+        or not api_params.get("UrlDatabase")
+        or not api_params.get("UrlDataYear")
+    ):
+        return json.dumps(
+            {
+                "error": "Monarch API base URL, credentials, database, or year not configured. Please check app_config.py and .env file."
+            }
+        )
+
+    try:
+        effective_end_date = datetime.date.today()
+        formatted_to_date = effective_end_date.strftime(api_date_format)
+
+        api_params[param_map.get("client_code", "CLIENT_CODE")] = client_code
+
+        query_string = "&".join([f"{k}={v}" for k, v in api_params.items()])
+        full_api_url = f"{api_base_url}?{query_string}"
+
+        response = requests.get(full_api_url)
+        response.raise_for_status()
+
+        api_response_data = response.json()
+
+        if (
+            not api_response_data
+            or not isinstance(api_response_data, list)
+            or not api_response_data[0].get("COLUMNS")
+            or not api_response_data[0].get("DATA")
+        ):
+            return json.dumps(
+                {
+                    "message": f"No data or invalid response structure for client {client_code} on {formatted_to_date} for configured financial year {api_params.get('UrlDataYear')}-{int(api_params.get('UrlDataYear', 0))+1}. Raw response: {api_response_data}"
+                }
+            )
+
+        columns = api_response_data[0]["COLUMNS"]
+        raw_trades_rows = api_response_data[0]["DATA"]
+
+        SENSITIVE_FIELDS = {
+            "client_name",
+            "client_id_mail",
+            "family_group_mail",
+            "client_id_fax",
+            "family_group_fax",
+            "branch_code_mail",
+            "branch_code_fax",
+            "family_group_name",
+            "branch_name",
+        }
+
+        structured_trades = []
+        for row in raw_trades_rows:
+            trade_entry = {}
+            for i, col_name_raw in enumerate(columns):
+                col_name = col_name_raw.lower()
+                value = row[i]
+
+                if col_name in SENSITIVE_FIELDS:
+                    trade_entry[col_name] = "[REDACTED]"
+                elif col_name == "trade_date":
+                    if isinstance(value, str) and value:
+                        try:
+                            dt_object = datetime.datetime.strptime(
+                                value.split(" +")[0], "%B, %d %Y %H:%M:%S"
+                            )
+                            trade_entry[col_name] = dt_object.strftime("%Y-%m-%d")
+                        except ValueError:
+                            trade_entry[col_name] = value
+                    else:
+                        trade_entry[col_name] = value
+                else:
+                    try:
+                        if (
+                            isinstance(value, str)
+                            and value.replace(".", "", 1).isdigit()
+                        ):
+                            trade_entry[col_name] = (
+                                float(value) if "." in value else int(value)
+                            )
+                        else:
+                            trade_entry[col_name] = value
+                    except ValueError:
+                        trade_entry[col_name] = value
+            structured_trades.append(trade_entry)
+
+        if not structured_trades:
+            return json.dumps(
+                {
+                    "message": f"No financial trades found for client {client_code} on {formatted_to_date} for configured financial year {api_params.get('UrlDataYear')}-{int(api_params.get('UrlDataYear', 0))+1}."
+                }
+            )
+
+        summary_lines = []
+        summary_lines.append(
+            f"Trades for client {client_code} up to {formatted_to_date} (Configured Financial Year: {api_params.get('UrlDataYear')}-{int(api_params.get('UrlDataYear', 0))+1}):"
+        )
+
+        total_notional_pl = sum(
+            [
+                float(t.get("notionalpl", 0))
+                for t in structured_trades
+                if t.get("notionalpl") is not None
+                and str(t["notionalpl"]).replace(".", "", 1).isdigit()
+            ]
+        )
+        summary_lines.append(f"- Overall Notional P&L: {total_notional_pl:,.2f}")
+
+        total_book_profit = sum(
+            [
+                float(t.get("bookprofit", 0))
+                for t in structured_trades
+                if t.get("bookprofit") is not None
+                and str(t["bookprofit"]).replace(".", "", 1).isdigit()
+            ]
+        )
+        summary_lines.append(f"- Total Book Profit: {total_book_profit:,.2f}")
+
+        total_expense = sum(
+            [
+                float(t.get("expense", 0))
+                for t in structured_trades
+                if t.get("expense") is not None
+                and str(t["expense"]).replace(".", "", 1).isdigit()
+            ]
+        )
+        summary_lines.append(f"- Total Expense: {total_expense:,.2f}")
+
+        profitable_scrips = sorted(
+            [
+                t
+                for t in structured_trades
+                if t.get("scrip_symbol")
+                and t.get("notionalpl") is not None
+                and float(t["notionalpl"]) > 0
+            ],
+            key=lambda x: float(x["notionalpl"]),
+            reverse=True,
+        )
+        if profitable_scrips:
+            summary_lines.append("\nTop 3 Profitable Holdings:")
+            for s in profitable_scrips[:3]:
+                summary_lines.append(
+                    f"  - {s['scrip_name']} ({s['scrip_symbol']}): {float(s['notionalpl']):,.2f}"
+                )
+
+        loss_making_scrips = sorted(
+            [
+                t
+                for t in structured_trades
+                if t.get("scrip_symbol")
+                and t.get("notionalpl") is not None
+                and float(t["notionalpl"]) < 0
+            ],
+            key=lambda x: float(x["notionalpl"]),
+        )
+        if loss_making_scrips:
+            summary_lines.append("\nTop 3 Loss-Making Holdings:")
+            for s in loss_making_scrips[:3]:
+                summary_lines.append(
+                    f"  - {s['scrip_name']} ({s['scrip_symbol']}): {float(s['notionalpl']):,.2f}"
+                )
+
+        summary_lines.append(
+            f"\nFull detailed data for {len(structured_trades)} entries is available for further analysis if you ask specific questions."
+        )
+        summary_lines.append(
+            "\nNote: Personal data fields such as names, emails, and fax numbers have been redacted for privacy."
+        )
+
+        return json.dumps(
+            {
+                "status": "success",
+                "summary": "\n".join(summary_lines),
+                "detailed_data": structured_trades,
+            }
+        )
+
+    except ValueError as e:
+        return json.dumps(
+            {
+                "error": f"Date format error during processing: {str(e)}. "
+                f"This might indicate an issue with date format in API response or internal parsing."
+            }
+        )
+    except requests.exceptions.RequestException as e:
+        return json.dumps(
+            {
+                "error": f"API request failed for client {client_code}: {str(e)}. Check URL, network, or API service."
+            }
+        )
+    except json.JSONDecodeError:
+        return json.dumps(
+            {
+                "error": "Invalid JSON response from trades API. Check API endpoint or response format."
+            }
+        )
+    except Exception as e:
+        return json.dumps(
+            {
+                "error": f"An unexpected error occurred while fetching trades for client {client_code}: {str(e)}"
+            }
+        )
+
+
+# --- Gemini-specific tool declaration ---
+GEMINI_GET_PERSONAL_FINANCIAL_TRADES = gemini_types.FunctionDeclaration(
+    name="get_personal_financial_trades",
+    description="Retrieves personal financial trade records and portfolio summaries for a client. "
+    "The tool automatically fetches all data from the start of the configured financial year up to the current date. "
+    "No date parameters are required for this tool. The AI should use the full dataset returned to answer questions.",
+    parameters=gemini_types.Schema(
+        type=gemini_types.Type.OBJECT,
+        properties={},
+        required=[],
+    ),
+)
+
+# --- OpenAI-specific tool declaration ---
+OPENAI_GET_PERSONAL_FINANCIAL_TRADES = {
+    "type": "function",
+    "function": {
+        "name": "get_personal_financial_trades",
+        "description": "Retrieves personal financial trade records and portfolio summaries for a client. "
+        "The tool automatically fetches all data from the start of the configured financial year up to the current date. "
+        "No date parameters are required for this tool. The AI should use the full dataset returned to answer questions.",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+        },
+    },
+}
+
+# --- ANTHROPIC-SPECIFIC TOOL DECLARATIONS ---
+ANTHROPIC_GET_PERSONAL_FINANCIAL_TRADES = {
+    "name": "get_personal_financial_trades",
+    "description": "Retrieves personal financial trade records and portfolio summaries for a client. "
+    "The tool automatically fetches all data from the start of the configured financial year up to the current date. "
+    "No date parameters are required for this tool. The AI should use the full dataset returned to answer questions.",
+    "input_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+    },
+}
+
+# --- DEEPSEEK-SPECIFIC TOOL DECLARATIONS ---
+DEEPSEEK_GET_PERSONAL_FINANCIAL_TRADES = {
+    "type": "function",
+    "function": {
+        "name": "get_personal_financial_trades",
+        "description": "Retrieves personal financial trade records and portfolio summaries for a client. "
+        "The tool automatically fetches all data from the start of the configured financial year up to the current date. "
+        "No date parameters are required for this tool. The AI should use the full dataset returned to answer questions.",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+        },
+    },
+}

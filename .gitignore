@@ -1,0 +1,17 @@
+.env
+
+*.pyc
+*.pyo
+
+.vscode/
+.idea/
+
+.DS_Store
+
+chats/
+
+.streamlit/
+
+PDF_for_API/
+
+api_reference_data/

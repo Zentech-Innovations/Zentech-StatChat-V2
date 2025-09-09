@@ -1,0 +1,30 @@
+section[data-testid="stSidebar"] {
+    width: 25vw !important;
+}
+
+[data-testid="stSidebarHeader"] {
+    padding: 0px;
+}
+
+[data-testid="stSidebarUserContent"] {
+    padding: 5px;
+}
+
+[class*="st-emotion-cache-"] hr {
+    margin: 10px;
+}
+
+section[data-testid="stSidebar"] div[data-baseweb="select"] input {
+    caret-color: transparent !important;
+    pointer-events: none !important;
+}
+
+.landing-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 150px;
+    padding: 20px;
+}
