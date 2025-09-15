@@ -17,18 +17,16 @@ def render_sidebar_content(authenticator):
     predefined_chats_for_profile = current_profile_config.get("predefined_chats", {})
     questions_for_profile = current_profile_config.get("questions", [])
 
-    side_col1, side_col2,side_col3 = st.columns([1, 4, 1])
+    st.markdown("### 📄Talk to Your Statement")
+    side_col1,side_col3 = st.columns([1, 1])
     with side_col1:
-        if st.button("🏠", use_container_width=True, help="Go to Profile Selection", disabled=is_processing):
+        if st.button("🏠 Home", use_container_width=True, disabled=is_processing):
             st.session_state.active_profile = None
             st.session_state.active_chat = None
             st.rerun()
-
-    with side_col2:
-        st.markdown("### 📄Talk to Your Statement")
     
     with side_col3:
-        authenticator.logout('👋', 'main', key='logout_button')
+        authenticator.logout('👋 Logout', 'main', key='logout_button', use_container_width=True)
 
     with st.container(border=True):
         available_model_names = list(app_config.AVAILABLE_MODELS.keys())
