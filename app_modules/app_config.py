@@ -15,7 +15,6 @@ AVAILABLE_MODELS = {
     "Anthropic Claude Sonnet 4": "claude-sonnet-4-20250514",
     "DeepSeek R1": "deepseek-chat",
     "Grok 3": "grok-3-latest",
-    "OpenAI GPT-5": "gpt-5"
 }
 DEFAULT_MODEL_NAME = "Google Gemini 2.5 Pro"
 
