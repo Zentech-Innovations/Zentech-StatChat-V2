@@ -134,6 +134,7 @@ PROFILE_CONFIGS = {
             "Client 3 Trades": {"client_code": os.getenv("CDSL_CLIENT_3"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_3") + ".pdf")},
             "Client 4 Trades": {"client_code": os.getenv("CDSL_CLIENT_4"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_4") + ".pdf")},
             "Client 5 Trades": {"client_code": os.getenv("CDSL_CLIENT_5"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_5") + ".pdf")},
+            "Client 6 Trades": {"client_code": os.getenv("CDSL_CLIENT_6"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_6") + ".pdf")},
         },
         "system_instruction": (
             f"You are a comprehensive Financial Portfolio Assistant, specializing in retrieving and analyzing a user's *personal investment portfolio and demat account data* within the Indian financial market (CDSL context). "
