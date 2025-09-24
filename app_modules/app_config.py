@@ -10,13 +10,13 @@ BASE_PDF_DIR = "documents"
 
 # --- Model Definitions ---
 AVAILABLE_MODELS = {
-    "Google Gemini 2.5 Pro": "gemini-2.5-pro",
     "OpenAI GPT-4.1": "gpt-4.1",
     "Anthropic Claude Sonnet 4": "claude-sonnet-4-20250514",
     "DeepSeek R1": "deepseek-chat",
+    "Google Gemini 2.5 Pro": "gemini-2.5-pro",
     "Grok 3": "grok-3-latest",
 }
-DEFAULT_MODEL_NAME = "Google Gemini 2.5 Pro"
+DEFAULT_MODEL_NAME = "OpenAI GPT-4.1"
 
 # --- FIXED MODEL CONFIGURATION ---
 FIXED_MODEL_ID = "gemini-2.5-pro"
@@ -177,6 +177,11 @@ PROFILE_CONFIGS = {
             "What is the total value of my investments as of the statement date? ",
             "How has the value of my portfolio changed over the past year? ",
             "What is the percentage breakdown of my investments across different asset classes like equity and debt? ",
+            "How many of the stocks that i currently own are a part of nifty 50? ",
+            "Show me a graph of my asset class breakdown. ",
+            "Graphically display my monthly portfolio valuation trend. ",
+            "For the period of my statement, was there a greater change in the value of my portfolio or nifty 50? Did i outperform the market? ",
+            "Which asset class has given me the best returns? ",
             "Can you show me a summary of my investments held individually and jointly? ",
             "What are the equity shares I currently hold in my demat account? ",
             "What is the total value of my stock holdings? ",
