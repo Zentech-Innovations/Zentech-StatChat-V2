@@ -22,9 +22,9 @@ DEFAULT_MODEL_NAME = "DeepSeek R1"
 FIXED_MODEL_ID = "gemini-2.5-pro"
 MODEL_TO_USE_FOR_API = f"models/{FIXED_MODEL_ID}"
 
-MONARCH_API_SETTINGS = {
-    "base_url":  os.getenv("MONARCH_API_BASE_URL"),
-}
+#MONARCH_API_SETTINGS = {
+#    "base_url":  os.getenv("MONARCH_API_BASE_URL"),
+#}
 
 CDSL_API_SETTINGS = {
     "base_url": os.getenv("CDSL_API_BASE_URL"),
