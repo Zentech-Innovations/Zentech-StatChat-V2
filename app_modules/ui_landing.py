@@ -9,13 +9,20 @@ def show_landing_page(authenticator):
     with col2:
         authenticator.logout('Logout', 'main', key='landing_page_logout')
     with st.container():
-        col1, col2, col3 = st.columns([1.5, 1, 1.5])
+        col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
         with col2:
             landing_image_path = "assets/zensys.png"
             if os.path.exists(landing_image_path):
                 st.image(landing_image_path, use_container_width=True)
             else:
                 st.warning(f"Landing image not found at {landing_image_path}")
+        with col3:
+            landing_image_path = "assets/NSDL_logo.png"
+            if os.path.exists(landing_image_path):
+                st.image(landing_image_path, use_container_width=True)
+            else:
+                st.warning(f"Landing image not found at {landing_image_path}")
+
 
     st.title("🔍 Welcome to Your Financial Chatbot")
 
