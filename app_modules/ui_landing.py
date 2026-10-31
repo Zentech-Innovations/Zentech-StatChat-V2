@@ -28,20 +28,21 @@ def show_landing_page(authenticator):
 
     num_profiles = len(PROFILE_CONFIGS)
     cols = st.columns(num_profiles)
-
-    for i, (profile_key, config) in enumerate(PROFILE_CONFIGS.items()):
-        with cols[i]:
-            if st.button(
-                config.get("button_label", profile_key),
-                key=f"profile_btn_{profile_key}",
-                # use_container_width=True,
-                help=f"Open {config.get('page_title', 'Profile')}"
-            ):
-                st.session_state.active_profile = profile_key
-                st.session_state.active_chat = None
-                st.session_state.chats = load_chats(profile_key)
-                st.session_state.current_loaded_profile_for_chats = profile_key
-                st.rerun()
+    btn_col1, btn_col2, btn_3 = st.columns([1,1,1])
+    with btn_col2:
+        for i, (profile_key, config) in enumerate(PROFILE_CONFIGS.items()):
+            with cols[i]:
+                if st.button(
+                    config.get("button_label", profile_key),
+                    key=f"profile_btn_{profile_key}",
+                    # use_container_width=True,
+                    help=f"Open {config.get('page_title', 'Profile')}"
+                ):
+                    st.session_state.active_profile = profile_key
+                    st.session_state.active_chat = None
+                    st.session_state.chats = load_chats(profile_key)
+                    st.session_state.current_loaded_profile_for_chats = profile_key
+                    st.rerun()
 
     disclaimer_text_landing = """
     <div style="text-align: center; margin-top: 30px; font-size: 0.9em; color: #666;">
