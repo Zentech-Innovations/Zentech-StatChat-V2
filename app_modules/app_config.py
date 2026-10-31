@@ -10,13 +10,14 @@ BASE_PDF_DIR = "documents"
 
 # --- Model Definitions ---
 AVAILABLE_MODELS = {
-    "OpenAI GPT-4.1": "gpt-4.1",
-    "Anthropic Claude Sonnet 4": "claude-sonnet-4-20250514",
-    "DeepSeek R1": "deepseek-chat",
-    "Google Gemini 2.5 Pro": "gemini-2.5-pro",
-    "Grok 3": "grok-3-latest",
+    #"OpenAI GPT-4.1": "gpt-4.1",
+    #"Anthropic Claude Sonnet 4": "claude-sonnet-4-20250514",
+    "DeepSeek Flash": "deepseek-flash",
+    "DeepSeek V4 Pro": "deepseek-v4-pro",
+    #"Google Gemini 2.5 Pro": "gemini-2.5-pro",
+    #"Grok 3": "grok-3-latest",
 }
-DEFAULT_MODEL_NAME = "OpenAI GPT-4.1"
+DEFAULT_MODEL_NAME = "DeepSeek Flash"
 
 # --- FIXED MODEL CONFIGURATION ---
 FIXED_MODEL_ID = "gemini-2.5-pro"
