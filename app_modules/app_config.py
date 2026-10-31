@@ -59,7 +59,7 @@ UNIFIED_SYSTEM_INSTRUCTION = (
 )
 
 PROFILE_CONFIGS = {
-    "profile1": {
+    "profile2": {
         "button_label": "NSDL Statement ChatBot",
         "page_title": "NSDL Statement ChatBot",
         "associated_api": "cdsl",
