@@ -13,6 +13,8 @@ AVAILABLE_MODELS = {
     #"OpenAI GPT-4.1": "gpt-4.1",
     #"Anthropic Claude Sonnet 4": "claude-sonnet-4-20250514",
     "DeepSeek R1": "deepseek-chat",
+    "DeepSeek Flash": "deepseek-flash",
+    "DeepSeek V4 Pro": "deepseek-v4-pro",
     #"Google Gemini 2.5 Pro": "gemini-2.5-pro",
     #"Grok 3": "grok-3-latest",
 }
