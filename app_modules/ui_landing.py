@@ -34,7 +34,7 @@ def show_landing_page(authenticator):
             if st.button(
                 config.get("button_label", profile_key),
                 key=f"profile_btn_{profile_key}",
-                use_container_width=True,
+                # use_container_width=True,
                 help=f"Open {config.get('page_title', 'Profile')}"
             ):
                 st.session_state.active_profile = profile_key
