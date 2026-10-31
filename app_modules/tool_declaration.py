@@ -49,7 +49,7 @@ def get_tools_for_profile(profile_key: str, llm_provider: str):
         tools.extend(COMMON_FINANCE_TOOLS_GROK)
 
 
-    if profile_key == "profile1":  
+    if profile_key == "profile2":  
         if llm_provider == "Google":
             tools.append(monarch_api.GEMINI_GET_PERSONAL_FINANCIAL_TRADES)
         elif llm_provider == "OpenAI":
@@ -61,7 +61,7 @@ def get_tools_for_profile(profile_key: str, llm_provider: str):
         elif llm_provider == "Grok":
             tools.append(monarch_api.OPENAI_GET_PERSONAL_FINANCIAL_TRADES) 
 
-    elif profile_key == "profile2":  
+    elif profile_key == "profile1":  
         if llm_provider == "Google":
             tools.append(cdsl_api.GEMINI_GET_CDSL_PORTFOLIO)
         elif llm_provider == "OpenAI":
