@@ -10,7 +10,7 @@ BASE_PDF_DIR = "documents"
 
 # --- Model Definitions ---
 AVAILABLE_MODELS = {
-    #"OpenAI GPT-4.1": "gpt-4.1",
+    "OpenAI GPT-4.1": "gpt-4.1",
     #"Anthropic Claude Sonnet 4": "claude-sonnet-4-20250514",
     "DeepSeek Flash": "deepseek-flash",
     "DeepSeek V4 Pro": "deepseek-v4-pro",
