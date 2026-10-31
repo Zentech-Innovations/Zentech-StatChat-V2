@@ -17,7 +17,7 @@ def show_landing_page(authenticator):
             else:
                 st.warning(f"Landing image not found at {landing_image_path}")
         with col3:
-            landing_image_path = "assets/NSDL_logo.png"
+            landing_image_path = "assets/NSDL_logo.jpg"
             if os.path.exists(landing_image_path):
                 st.image(landing_image_path, use_container_width=True)
             else:
