@@ -121,7 +121,7 @@ def display_chat_history(current_chat_messages):
             if content_type == "chart":
                 try:
                     fig = pio.from_json(msg["content"])
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, key="portfolio_valuation_chart", use_container_width=True)
                 except Exception as e:
                     st.error(f"Could not display chart from history: {e}")
             else:
