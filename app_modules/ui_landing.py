@@ -9,14 +9,8 @@ def show_landing_page(authenticator):
     with col2:
         authenticator.logout('Logout', 'main', key='landing_page_logout')
     with st.container():
-        col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
+        col1, col2, col3 = st.columns([1, 1, 1])
         with col2:
-            landing_image_path = "assets/zensys.png"
-            if os.path.exists(landing_image_path):
-                st.image(landing_image_path, use_container_width=True)
-            else:
-                st.warning(f"Landing image not found at {landing_image_path}")
-        with col3:
             landing_image_path = "assets/NSDL_logo.jpg"
             if os.path.exists(landing_image_path):
                 st.image(landing_image_path, use_container_width=True)
@@ -29,20 +23,21 @@ def show_landing_page(authenticator):
     num_profiles = len(PROFILE_CONFIGS)
     cols = st.columns(num_profiles)
     btn_col1, btn_col2, btn_3 = st.columns([1,1,1])
-    with btn_col2:
-        for i, (profile_key, config) in enumerate(PROFILE_CONFIGS.items()):
-            with cols[i]:
-                if st.button(
-                    config.get("button_label", profile_key),
-                    key=f"profile_btn_{profile_key}",
-                    # use_container_width=True,
-                    help=f"Open {config.get('page_title', 'Profile')}"
-                ):
-                    st.session_state.active_profile = profile_key
-                    st.session_state.active_chat = None
-                    st.session_state.chats = load_chats(profile_key)
-                    st.session_state.current_loaded_profile_for_chats = profile_key
-                    st.rerun()
+
+    for i, (profile_key, config) in enumerate(PROFILE_CONFIGS.items()):
+        # with cols[i]:
+        with btn_col2:
+            if st.button(
+                config.get("button_label", profile_key),
+                key=f"profile_btn_{profile_key}",
+                use_container_width=True,
+                help=f"Open {config.get('page_title', 'Profile')}"
+            ):
+                st.session_state.active_profile = profile_key
+                st.session_state.active_chat = None
+                st.session_state.chats = load_chats(profile_key)
+                st.session_state.current_loaded_profile_for_chats = profile_key
+                st.rerun()
 
     disclaimer_text_landing = """
     <div style="text-align: center; margin-top: 30px; font-size: 0.9em; color: #666;">
