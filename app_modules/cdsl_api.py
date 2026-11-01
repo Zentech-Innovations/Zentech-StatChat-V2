@@ -367,7 +367,7 @@ def get_cdsl_portfolio(client_code: str) -> str:
             #        "detailed_data": final_structured_output,
             #   }
             # )
-            return decrypted_full_data
+            return json.dumps(decrypted_full_data, default=str)
         else:
             return json.dumps(
                 {
