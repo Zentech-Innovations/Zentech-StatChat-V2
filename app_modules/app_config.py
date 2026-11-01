@@ -66,7 +66,7 @@ PROFILE_CONFIGS = {
         "page_title": "NSDL Statement ChatBot",
         "associated_api": "cdsl",
         "predefined_chats": {
-            "Client 1 Trades": {"client_code": os.getenv("CDSL_CLIENT_1"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_1") + ".pdf")},
+            "Client 1 Statement": {"client_code": os.getenv("CDSL_CLIENT_1"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_1") + ".pdf")},
             #"Client 2 Trades": {"client_code": os.getenv("CDSL_CLIENT_2"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_2") + ".pdf")},
             #"Client 3 Trades": {"client_code": os.getenv("CDSL_CLIENT_3"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_3") + ".pdf")},
             #"Client 4 Trades": {"client_code": os.getenv("CDSL_CLIENT_4"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_4") + ".pdf")},
