@@ -359,14 +359,15 @@ def get_cdsl_portfolio(client_code: str) -> str:
                 summary_parts.append("\nNo NPS details available.")
 
             final_summary_str = "\n".join(summary_parts)
-
-            return json.dumps(
-                {
-                    "status": "success",
-                    "summary": final_summary_str,
-                    "detailed_data": final_structured_output,
-                }
-            )
+            
+            # return json.dumps(
+            #    {
+            #        "status": "success",
+            #        "summary": final_summary_str,
+            #        "detailed_data": final_structured_output,
+            #   }
+            # )
+            return decrypted_full_data
         else:
             return json.dumps(
                 {
