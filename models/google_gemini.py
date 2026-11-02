@@ -177,7 +177,7 @@ def generate_gemini_response(
                     tool_function = tool_declaration.TOOL_IMPLEMENTATIONS[fc_name]
                     args_dict = {key: value for key, value in fc_args_struct.items()}
 
-                    if fc_name == "get_personal_financial_trades" or fc_name == "get_cdsl_portfolio": 
+                    if fc_name == "get_personal_financial_trades" or fc_name == "get_nsdl_portfolio": 
                         args_dict["client_code"] = client_code_from_session
 
                     try:
