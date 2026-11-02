@@ -22,7 +22,7 @@ DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 DEEPSEEK_API_BASE = ("https://api.deepseek.com")
 GROK_API_KEY = os.getenv("GROK_API_KEY")
 GROK_API_BASE = ("https://api.x.ai/v1")
-CDSL_DECRYPTION_KEY_HEX = os.getenv("CDSL_DECRYPTION_KEY_HEX")
+NSDL_DECRYPTION_KEY_HEX = os.getenv("NSDL_DECRYPTION_KEY_HEX")
 
 if not GOOGLE_API_KEY:
     st.error("GEMINI_API_KEY not found.")
@@ -39,8 +39,8 @@ if not DEEPSEEK_API_KEY:
 if not GROK_API_KEY: 
     st.error("GROK_API_KEY not found.")
     st.stop()
-if not CDSL_DECRYPTION_KEY_HEX:
-    st.error("CDSL_DECRYPTION_KEY_HEX not found.")
+if not NSDL_DECRYPTION_KEY_HEX:
+    st.error("NSDL_DECRYPTION_KEY_HEX not found.")
     st.stop()
 
 authenticator = stauth.Authenticate(
