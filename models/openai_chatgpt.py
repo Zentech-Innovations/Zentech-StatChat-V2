@@ -11,7 +11,7 @@ MAX_TOOL_CALL_ROUNDS = 8
 
 SESSION_SPECIFIC_TOOLS = {
     "get_personal_financial_trades",
-    "get_cdsl_portfolio",
+    "get_nsdl_portfolio",
 }
 
 
