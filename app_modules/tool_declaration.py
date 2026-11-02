@@ -1,5 +1,5 @@
 # app_modules/tool_declaration.py
-from . import finance_tool, visualization_tool, monarch_api, cdsl_api
+from . import finance_tool, visualization_tool, monarch_api, nsdl_api
 
 COMMON_FINANCE_TOOLS_GEMINI = [
     finance_tool.GEMINI_GET_STOCK_PRICE,
@@ -63,15 +63,15 @@ def get_tools_for_profile(profile_key: str, llm_provider: str):
 
     elif profile_key == "profile1":  
         if llm_provider == "Google":
-            tools.append(cdsl_api.GEMINI_GET_CDSL_PORTFOLIO)
+            tools.append(nsdl_api.GEMINI_GET_NSDL_PORTFOLIO)
         elif llm_provider == "OpenAI":
-            tools.append(cdsl_api.OPENAI_GET_CDSL_PORTFOLIO)
+            tools.append(nsdl_api.OPENAI_GET_NSDL_PORTFOLIO)
         elif llm_provider == "Anthropic":
-            tools.append(cdsl_api.ANTHROPIC_GET_CDSL_PORTFOLIO)
+            tools.append(nsdl_api.ANTHROPIC_GET_NSDL_PORTFOLIO)
         elif llm_provider == "DeepSeek":
-            tools.append(cdsl_api.DEEPSEEK_GET_CDSL_PORTFOLIO)
+            tools.append(nsdl_api.DEEPSEEK_GET_NSDL_PORTFOLIO)
         elif llm_provider == "Grok":
-            tools.append(cdsl_api.GROK_GET_CDSL_PORTFOLIO)
+            tools.append(nsdl_api.GROK_GET_NSDL_PORTFOLIO)
 
     return tools
 
@@ -81,5 +81,5 @@ TOOL_IMPLEMENTATIONS = {
     "get_historical_price_range": finance_tool.get_historical_price_range_impl,
     "display_comparison_chart": visualization_tool.create_comparison_chart,
     "get_personal_financial_trades": monarch_api.get_monarch_personal_financial_trades_impl,
-    "get_cdsl_portfolio": cdsl_api.get_cdsl_portfolio,
+    "get_nsdl_portfolio": nsdl_api.get_nsdl_portfolio,
 }
