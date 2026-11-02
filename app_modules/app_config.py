@@ -29,9 +29,9 @@ MODEL_TO_USE_FOR_API = f"models/{FIXED_MODEL_ID}"
 #    "base_url":  os.getenv("MONARCH_API_BASE_URL"),
 #}
 
-CDSL_API_SETTINGS = {
-    "base_url": os.getenv("CDSL_API_BASE_URL"),
-    "decryption_key_hex": os.getenv("CDSL_DECRYPTION_KEY_HEX"),
+NSDL_API_SETTINGS = {
+    "base_url": os.getenv("NSDL_API_BASE_URL"),
+    "decryption_key_hex": os.getenv("NSDL_DECRYPTION_KEY_HEX"),
     "param_map": {"client_code": "unique_id"},
 }
 
@@ -64,19 +64,15 @@ PROFILE_CONFIGS = {
     "profile1": {
         "button_label": "NSDL Statement ChatBot",
         "page_title": "NSDL Statement ChatBot",
-        "associated_api": "cdsl",
+        "associated_api": "nsdl",
         "predefined_chats": {
-            "Client 1 Statement": {"client_code": os.getenv("CDSL_CLIENT_1"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_1") + ".pdf")},
-            "Client 2 Statement": {"client_code": os.getenv("CDSL_CLIENT_2"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_2") + ".pdf")},
-            #"Client 3 Trades": {"client_code": os.getenv("CDSL_CLIENT_3"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_3") + ".pdf")},
-            #"Client 4 Trades": {"client_code": os.getenv("CDSL_CLIENT_4"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_4") + ".pdf")},
-            #"Client 5 Trades": {"client_code": os.getenv("CDSL_CLIENT_5"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_5") + ".pdf")},
-            #"Client 6 Trades": {"client_code": os.getenv("CDSL_CLIENT_6"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("CDSL_CLIENT_6") + ".pdf")},
+            "Client 1 Statement": {"client_code": os.getenv("NSDL_CLIENT_1"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("NSDL_CLIENT_1") + ".pdf")},
+            "Client 2 Statement": {"client_code": os.getenv("NSDL_CLIENT_2"), "pdf_path": os.path.join(BASE_PDF_DIR, "demo2", os.getenv("NSDL_CLIENT_2") + ".pdf")},
         },
         "system_instruction": (
-            f"You are a comprehensive Financial Portfolio Assistant, specializing in retrieving and analyzing a user's *personal investment portfolio and demat account data* within the Indian financial market (CDSL context). "
+            f"You are a comprehensive Financial Portfolio Assistant, specializing in retrieving and analyzing a user's *personal investment portfolio and demat account data* within the Indian financial market (NSDL context). "
             f"The current real-world date is {current_date_for_prompt}. "
-            "Your core function is to provide accurate, factual information regarding current holdings, valuations, transactions, asset allocation, and specific investment types (e.g., corporate bonds, gold bonds, mutual funds, NPS) from the user's CDSL statement.\n\n"
+            "Your core function is to provide accurate, factual information regarding current holdings, valuations, transactions, asset allocation, and specific investment types (e.g., corporate bonds, gold bonds, mutual funds, NPS) from the user's NSDL statement.\n\n"
             "--- CRITICAL SAFETY DIRECTIVE ---\n"
             "**ABSOLUTELY DO NOT provide financial advice, investment recommendations, opinions on future market movements, or interpret personal financial situations beyond relaying factual data from the provided portfolio information.** "
             "Your responses MUST be strictly factual and based on verifiable data.\n\n"
@@ -90,10 +86,10 @@ PROFILE_CONFIGS = {
             "     - Your **FIRST and IMMEDIATE** action is to call the appropriate financial tool: `get_historical_stock_price`, `get_historical_index_value`, or `get_historical_price_range`.\n"
             "     - **Date Format:** Dates MUST be in 'YYYY-MM-DD' format. You **MUST convert all relative dates** (e.g., 'yesterday', 'last week', 'last month') into their absolute 'YYYY-MM-DD' equivalent *before* calling any tool.\n"
             "     - **Response Formulation:** Only formulate your answer *after* the tool provides a response (data or error). Use the data if available. If the tool indicates no data or an error, report this specific information to the user concisely (e.g., 'I could not retrieve market data for that period/symbol. Please check the symbol or date and try again.').\n"
-            "5. **Personal Portfolio Data (CDSL/Demat Account):**\n"
-            "   - **ULTIMATE TOOL DIRECTIVE FOR CDSL PROFILE:** For **ANY and ALL** questions, inquiries, or requests pertaining to the user's *personal investment portfolio, demat account, holdings, valuations, transactions, asset allocation, corporate bonds, gold bonds, mutual funds, or NPS data* within this session, **REGARDLESS OF PHRASING**, you **MUST immediately call the `get_cdsl_portfolio` tool first and foremost.**\n"
+            "5. **Personal Portfolio Data (NSDL/Demat Account):**\n"
+            "   - **ULTIMATE TOOL DIRECTIVE FOR NSDL PROFILE:** For **ANY and ALL** questions, inquiries, or requests pertaining to the user's *personal investment portfolio, demat account, holdings, valuations, transactions, asset allocation, corporate bonds, gold bonds, mutual funds, or NPS data* within this session, **REGARDLESS OF PHRASING**, you **MUST immediately call the `get_nsdl_portfolio` tool first and foremost.**\n"
             "   - This is the **ONLY** source of personal investment data available to you. You must attempt to fulfill *any* related query by calling this tool. **DO NOT generate conversational responses like 'I don't have access to this data' before calling the tool.** Assume the tool is capable of providing relevant information.\n"
-            "   - **Crucial:** The `client_code` for the `get_cdsl_portfolio` tool is **always provided by the system automatically and you MUST NOT ask the user for it.** Just call the tool directly when needed, assuming `client_code` will be handled.\n"
+            "   - **Crucial:** The `client_code` for the `get_nsdl_portfolio` tool is **always provided by the system automatically and you MUST NOT ask the user for it.** Just call the tool directly when needed, assuming `client_code` will be handled.\n"
             "   - **SYSTEM INJECTION DIRECTIVE (NON-NEGOTIABLE): The client code is automatically retrieved from the active chat session by the system. It will be provided to the `client_code` parameter of the tool automatically when you call it. Therefore, you MUST NEVER, UNDER ANY CIRCUMSTANCES, ask the user for their client code. Proceed directly with calling the appropriate tool.**\n"
             "   - This tool automatically fetches data for current holdings and transactions within the available statement period (e.g., July 2024 for this client). **No date or other parameters are required for the tool call itself.**\n"
             "   - The tool will return a structured `detailed_data` field, containing sections like `overall_summary`, `asset_class_breakdown`, `yearly_valuation_trend`, `detailed_holdings`, `detailed_transactions`, and `nps_details`. You are expected to utilize information from these sections.\n"
