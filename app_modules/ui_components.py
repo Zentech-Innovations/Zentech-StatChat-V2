@@ -75,20 +75,20 @@ def render_sidebar_content(authenticator):
                 st.session_state.pdf_to_display_in_dialog = None
                 st.rerun()
 
-            col1, col2 = st.columns([1, 1])
-            with col1:
+            col1, col2, col3 = st.columns([0.5, 1, 0.5])
+            with col2:
                 if st.button(f"🗑️ Clear Chat", key=f"delete_{st.session_state.active_chat}", help="Delete all messages", use_container_width=True, disabled=is_processing):
                     pdf_path_for_chat = predefined_chats_for_profile[st.session_state.active_chat].get("pdf_path")
                     client_code_for_chat = predefined_chats_for_profile[st.session_state.active_chat].get("client_code")
                     chat_utils.save_chat(active_profile_key, st.session_state.active_chat, {"pdf_path": pdf_path_for_chat, "client_code": client_code_for_chat, "messages": []})
                     st.session_state.chats[st.session_state.active_chat]["messages"] = []
                     st.rerun()
-            with col2:
-                if st.button("📄 View PDF", key=f"view_pdf_{st.session_state.active_chat}", use_container_width=True, disabled=is_processing):
-                    pdf_path = st.session_state.chats[st.session_state.active_chat].get("pdf_path")
-                    if pdf_path and os.path.exists(pdf_path):
-                        st.session_state.pdf_to_display_in_dialog = pdf_path
-                        st.rerun()
+            # with col2:
+            #     if st.button("📄 View PDF", key=f"view_pdf_{st.session_state.active_chat}", use_container_width=True, disabled=is_processing):
+            #         pdf_path = st.session_state.chats[st.session_state.active_chat].get("pdf_path")
+            #         if pdf_path and os.path.exists(pdf_path):
+            #             st.session_state.pdf_to_display_in_dialog = pdf_path
+            #             st.rerun()
     
     st.markdown("---")
     st.markdown("## ❓ Select a Question")
