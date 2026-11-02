@@ -92,7 +92,7 @@ def generate_claude_response(
                     if tool_name in tool_declaration.TOOL_IMPLEMENTATIONS:
                         implementation = tool_declaration.TOOL_IMPLEMENTATIONS[tool_name]
 
-                        if tool_name in ["get_personal_financial_trades", "get_cdsl_portfolio"]: 
+                        if tool_name in ["get_personal_financial_trades", "get_nsdl_portfolio"]: 
                             tool_args["client_code"] = client_code_from_session
 
                         try:
